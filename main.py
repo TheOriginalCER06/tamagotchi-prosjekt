@@ -13,11 +13,11 @@ input.on_button_pressed(Button.A, on_button_pressed_a)
 def stopScreenActionsAndClear():
     led.stop_animation()
     basic.clear_screen()
+meny = 0
 våkenhet = 0
 isAwake = False
 laget_av = "- Christian E. Røren og Victor"
 isAwake = False
-meny = 0
 matNivå = 5
 våkenhet = 5
 glede = 5
@@ -29,13 +29,11 @@ def on_every_interval():
 loops.every_interval(10000, on_every_interval)
 
 def on_forever():
-    global meny, isAwake
+    global meny, isAwake, barerARRAY
     for value in barerARRAY:
-        if barerARRAY[value] > 5:
-            barerARRAY[value] = 0
-        else:
-            pass
-    basic.show_string("" + str((glede)))
+        basic.show_string(str(barerARRAY.index(value)))
+        barerARRAY[barerARRAY.index(value)-1]
+    #basic.show_string("" + str((glede)))
     meny = meny % 2
     if meny == 0:
         if isAwake == True:

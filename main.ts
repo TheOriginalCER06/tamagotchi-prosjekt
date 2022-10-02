@@ -13,14 +13,23 @@ function stopScreenActionsAndClear () {
     led.stopAnimation()
     basic.clearScreen()
 }
+function drawBar (bar: number, indexOfBar: number) {
+    itteration = 0
+    for (let index = 0; index < bar; index++) {
+        led.plot(itteration, indexOfBar - 1)
+        itteration += 1
+    }
+}
+let itteration = 0
 let meny = 0
 let våkenhet = 0
 let isAwake = false
 let laget_av = "- Christian E. Røren og Victor"
 isAwake = false
+let glede = 3
+våkenhet = 4
 let matNivå = 5
-våkenhet = 5
-let glede = 5
+// foreløpig unødvendig
 let barerARRAY = [glede, våkenhet, matNivå]
 loops.everyInterval(10000, function () {
     if (true) {
@@ -28,14 +37,6 @@ loops.everyInterval(10000, function () {
     }
 })
 basic.forever(function () {
-    for (let value of barerARRAY) {
-        if (barerARRAY[value] > 5) {
-            barerARRAY[value] = 0
-        } else {
-        	
-        }
-    }
-    basic.showString("" + glede)
     meny = meny % 2
     if (meny == 0) {
         if (isAwake == true) {
@@ -47,8 +48,20 @@ basic.forever(function () {
         }
     } else if (meny == 1) {
         isAwake = true
-        basic.showIcon(IconNames.Heart)
+        drawBar(glede, 1)
+        drawBar(våkenhet, 3)
+        drawBar(matNivå, 5)
     } else {
     	
+    }
+    // ditta hadde vært unødvendig om ting hadde fungert, men det gjør det ikke haha
+    if (glede > 5) {
+        glede = 5
+    }
+    if (matNivå > 5) {
+        glede = 5
+    }
+    if (glede > 5) {
+        våkenhet = 5
     }
 })
