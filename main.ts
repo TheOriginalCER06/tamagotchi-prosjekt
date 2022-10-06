@@ -13,6 +13,18 @@ function stopScreenActionsAndClear () {
     led.stopAnimation()
     basic.clearScreen()
 }
+input.onButtonPressed(Button.AB, function () {
+    if (isAwake == false) {
+        isAwake = true
+        stopScreenActionsAndClear()
+        våkenhet = 5
+        glede += 1
+    } else {
+        isAwake = false
+        disableBars = 0
+        stopScreenActionsAndClear()
+    }
+})
 input.onButtonPressed(Button.B, function () {
     if (isAwake == true && matNivå < 5) {
         matNivå += 1
@@ -44,6 +56,9 @@ input.onLogoEvent(TouchButtonEvent.Touched, function () {
         }
     }
 })
+function ikkeTenkSelv () {
+	
+}
 function drawBar (bar: number, indexOfBar: number) {
     itteration = 0
     for (let index = 0; index < bar; index++) {
@@ -104,5 +119,8 @@ basic.forever(function () {
         våkenhet = 5
     } else if (våkenhet < 0) {
         våkenhet = 0
+    }
+    if (("tenker selv" as any) == (true as any)) {
+        ikkeTenkSelv()
     }
 })
