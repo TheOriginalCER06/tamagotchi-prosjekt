@@ -66,6 +66,7 @@ function drawBar (bar: number, indexOfBar: number) {
         itteration += 1
     }
 }
+let matRedusert15min = 0
 let itteration = 0
 let disableBars = 0
 let meny = 0
@@ -80,9 +81,15 @@ våkenhet = 4
 matNivå = 5
 // foreløpig unødvendig
 let barerARRAY = [glede, våkenhet, matNivå]
+loops.everyInterval(600000, function () {
+    våkenhet += -1
+})
 loops.everyInterval(10000, function () {
-    if (true) {
-    	
+    if (isAwake == true) {
+        if (matNivå <= matNivå / randint(1, 10)) {
+            matRedusert15min = 1
+            matNivå += -1
+        }
     }
 })
 basic.forever(function () {
@@ -122,5 +129,13 @@ basic.forever(function () {
     }
     if (("tenker selv" as any) == (true as any)) {
         ikkeTenkSelv()
+    }
+})
+loops.everyInterval(900000, function () {
+    if (matRedusert15min != 1) {
+        matRedusert15min = 1
+        matNivå += -1
+    } else {
+        matRedusert15min = 0
     }
 })
