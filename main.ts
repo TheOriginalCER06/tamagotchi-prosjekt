@@ -9,20 +9,73 @@ input.onButtonPressed(Button.A, function () {
         stopScreenActionsAndClear()
     }
 })
+function søvning_animasjon () {
+    basic.showLeds(`
+        . . . . .
+        . # . # .
+        . . . . .
+        . . . . .
+        . # # # .
+        `)
+    basic.pause(200)
+    basic.showLeds(`
+        . . . . .
+        # # . # #
+        . . . . .
+        . . . . .
+        . # # # .
+        `)
+    basic.showLeds(`
+        . . . . .
+        # # . # #
+        . . . . .
+        . . # . .
+        . # . # .
+        `)
+    basic.showLeds(`
+        . . . . .
+        # # . # #
+        . . . . .
+        . . # . .
+        . # . # .
+        `)
+    basic.showLeds(`
+        . . . . .
+        # # . # #
+        . . . . .
+        . . # . .
+        . # . # .
+        `)
+    basic.showLeds(`
+        . . . . .
+        # # . # #
+        . . . . .
+        . . . . .
+        . # # # .
+        `)
+    basic.pause(500)
+    basic.showLeds(`
+        . . . . .
+        . # . # .
+        . . . . .
+        . . . . .
+        . # # # .
+        `)
+    basic.pause(100)
+}
 function stopScreenActionsAndClear () {
     led.stopAnimation()
     basic.clearScreen()
 }
 input.onButtonPressed(Button.AB, function () {
+    // else brukes foreløpig til debug
     if (isAwake == false) {
         isAwake = true
         stopScreenActionsAndClear()
         våkenhet = 5
         glede += 1
     } else {
-        isAwake = false
-        disableBars = 0
-        stopScreenActionsAndClear()
+    	
     }
 })
 input.onButtonPressed(Button.B, function () {
@@ -56,9 +109,6 @@ input.onLogoEvent(TouchButtonEvent.Touched, function () {
         }
     }
 })
-function ikkeTenkSelv () {
-	
-}
 function drawBar (bar: number, indexOfBar: number) {
     itteration = 0
     for (let index = 0; index < bar; index++) {
@@ -67,6 +117,7 @@ function drawBar (bar: number, indexOfBar: number) {
     }
 }
 let matRedusert15min = 0
+let gledeRedusert1min = 0
 let itteration = 0
 let disableBars = 0
 let meny = 0
@@ -83,22 +134,52 @@ matNivå = 5
 let barerARRAY = [glede, våkenhet, matNivå]
 loops.everyInterval(600000, function () {
     våkenhet += -1
+    if (gledeRedusert1min != 1) {
+        gledeRedusert1min = 1
+        glede += -1
+    } else {
+        gledeRedusert1min = 0
+    }
 })
 loops.everyInterval(10000, function () {
     if (isAwake == true) {
-        if (matNivå <= matNivå / randint(1, 10)) {
+        // 10-60% sannsynlighet at man reduserer matnivå
+        if (6 - matNivå <= randint(1, 10)) {
             matRedusert15min = 1
             matNivå += -1
         }
+    }
+    if (gledeRedusert1min != 1) {
+        // fat % at glede reduseres, men det vil skje i hvert fall 1 gang i minuttet
+        if (10 <= randint(1, 100)) {
+            gledeRedusert1min = 1
+            glede += -1
+        }
+    } else {
+        gledeRedusert1min = 0
     }
 })
 basic.forever(function () {
     meny = meny % 2
     if (meny == 0) {
         if (isAwake == true) {
-            // burde vise noe forskjellig basert på glede
-            if (true) {
-                basic.showIcon(IconNames.Happy)
+            if (våkenhet > 2) {
+                if (glede >= 4) {
+                    basic.showIcon(IconNames.Happy)
+                } else if (glede >= 2) {
+                    basic.showLeds(`
+                        . . . . .
+                        . # . # .
+                        . . . . .
+                        . # # # .
+                        . . . . .
+                        `)
+                } else if (glede >= 1) {
+                    basic.showIcon(IconNames.Sad)
+                }
+            } else {
+                stopScreenActionsAndClear()
+                søvning_animasjon()
             }
         } else {
             basic.showString("ZzZzZzZz")
@@ -108,8 +189,6 @@ basic.forever(function () {
         drawBar(glede, 1)
         drawBar(våkenhet, 3)
         drawBar(matNivå, 5)
-    } else {
-    	
     }
     // ditta hadde vært unødvendig om ting hadde fungert, men det gjør det ikke haha
     if (glede > 5) {
@@ -126,9 +205,6 @@ basic.forever(function () {
         våkenhet = 5
     } else if (våkenhet < 0) {
         våkenhet = 0
-    }
-    if (("tenker selv" as any) == (true as any)) {
-        ikkeTenkSelv()
     }
 })
 loops.everyInterval(900000, function () {
